@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ArrowDownRight, Terminal } from 'lucide-react';
+import { Terminal } from 'lucide-react';
 import { PORTFOLIO_DATA } from '@/data/portfolio';
 
 interface HeroProps {
@@ -78,14 +78,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
           {personal.bio}
         </p>
 
-        {/* Minimal Actions */}
+        {/* Minimal Actions & Status */}
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <a href="#about" className="btn-minimal">
-            <span>About Me</span>
-            <ArrowDownRight size={16} />
-          </a>
-
-          <a href="#contact" className="btn-minimal-outline">
+          <a href="#contact" className="btn-minimal">
             Get in Touch
           </a>
 
@@ -93,6 +88,25 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
             <Terminal size={15} />
             <span>CLI Mode</span>
           </button>
+
+          {/* Status Badge */}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.55rem',
+              padding: '0.65rem 1rem',
+              border: '1px solid var(--border-light)',
+              background: 'var(--bg-secondary)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.8rem',
+            }}
+          >
+            <span className="green-pulse-dot" />
+            <span style={{ color: 'var(--fg-secondary)', fontWeight: 500 }}>
+              Status: Creating something beautiful
+            </span>
+          </div>
         </div>
       </div>
     </section>
