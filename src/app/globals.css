@@ -265,6 +265,120 @@ body {
   z-index: 50 !important;
 }
 
+/* Liquid Ink Impact Ripple Movement when Stamp Slams Back */
+@keyframes inkImpactRipple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.72) rotate(-10deg);
+  }
+  35% {
+    transform: translate(-50%, -50%) scale(1.18) rotate(-4deg);
+    filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.45));
+  }
+  65% {
+    transform: translate(-50%, -50%) scale(0.96) rotate(-8deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.05) rotate(-7deg);
+    filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.25));
+  }
+}
+
+.ink-splash-impact {
+  animation: inkImpactRipple 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+}
+
+/* Falling Liquid Ink Droplet Effect to Bottom */
+@keyframes inkDropFall {
+  0% {
+    transform: translateY(0) scale(1, 1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(50px) scale(0.8, 1.4);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(120px) scale(0.3, 0.3);
+    opacity: 0;
+  }
+}
+
+.ink-drip-falling {
+  animation: inkDropFall 0.75s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards;
+}
+
+/* Screen-space Ink Droplet Splatter: Explosive Burst -> Stick for 1s -> Drip to Bottom */
+@keyframes screenInkBurstDrip {
+  0% {
+    transform: translate(0, 0) scale(0.2);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  25% {
+    transform: var(--burst-target) scale(1.15);
+    opacity: 0.95;
+  }
+  /* Hold on screen glass for 1 second */
+  60% {
+    transform: var(--burst-target) scale(1) translateY(12px);
+    opacity: 0.95;
+  }
+  /* Gravity Drip & Slide Down to Bottom of Screen */
+  85% {
+    transform: var(--burst-target) scale(0.7, 1.4) translateY(45vh);
+    opacity: 0.65;
+  }
+  100% {
+    transform: var(--burst-target) scale(0.2, 0.2) translateY(95vh);
+    opacity: 0;
+  }
+}
+
+.screen-ink-droplet {
+  animation: screenInkBurstDrip 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Screen Ink Splatter: Irregular scattered splash onto screen -> Hold -> Fall to bottom */
+@keyframes splashWaitThenFall {
+  /* STAGE 1: Explosive Splatter onto Screen Glass (0% - 20%) */
+  0% {
+    transform: scale(0.2) var(--burst-rotate, rotate(0deg));
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  25% {
+    transform: scale(1.15) var(--burst-rotate, rotate(0deg));
+    opacity: 0.95;
+  }
+  /* STAGE 2: HOLD / WAIT ON SCREEN GLASS for a little bit (25% - 52%) */
+  52% {
+    transform: scale(1) translateY(8px) var(--burst-rotate, rotate(0deg));
+    opacity: 0.95;
+  }
+  /* STAGE 3: GRAVITY DROP - Fall down through items to bottom (52% - 100%) */
+  78% {
+    transform: scale(0.7, 1.5) translateY(35vh) var(--burst-rotate, rotate(0deg));
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0.2, 0.2) translateY(80vh) var(--burst-rotate, rotate(0deg));
+    opacity: 0;
+  }
+}
+
+.screen-splash-drop {
+  position: fixed;
+  background: radial-gradient(circle at 35% 30%, #3a3a3a 0%, #0c0c0c 70%, #000000 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset -1px -1px 3px rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  z-index: 99999;
+  animation: splashWaitThenFall cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
 /* Vanishing Ink Text Styling */
 .vanishing-ink-input {
   background: transparent;

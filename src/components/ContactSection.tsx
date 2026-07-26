@@ -11,6 +11,21 @@ const STAMP_QUOTES = [
   "Be Delusional;"
 ];
 
+const SCREEN_SPLASH_DROPS = [
+  { top: '10%', left: '26%', size: 24, duration: 2.2, delay: 0,   rotate: 'rotate(25deg)',   borderRadius: '42% 58% 70% 30% / 45% 45% 55% 55%' },
+  { top: '6%',  left: '66%', size: 18, duration: 2.8, delay: 60,  rotate: 'rotate(-45deg)',  borderRadius: '60% 40% 30% 70% / 50% 30% 70% 50%' },
+  { top: '28%', left: '12%', size: 28, duration: 2.0, delay: 30,  rotate: 'rotate(80deg)',   borderRadius: '35% 65% 60% 40% / 40% 60% 40% 60%' },
+  { top: '18%', left: '84%', size: 20, duration: 2.6, delay: 100, rotate: 'rotate(-15deg)',  borderRadius: '55% 45% 75% 25% / 35% 65% 35% 65%' },
+  { top: '44%', left: '36%', size: 15, duration: 3.2, delay: 150, rotate: 'rotate(110deg)',  borderRadius: '40% 60% 50% 50% / 60% 40% 60% 40%' },
+  { top: '14%', left: '46%', size: 22, duration: 2.3, delay: 80,  rotate: 'rotate(-70deg)',  borderRadius: '65% 35% 45% 55% / 45% 55% 45% 55%' },
+  { top: '58%', left: '20%', size: 16, duration: 3.0, delay: 200, rotate: 'rotate(35deg)',   borderRadius: '30% 70% 65% 35% / 55% 35% 65% 45%' },
+  { top: '52%', left: '76%', size: 26, duration: 2.1, delay: 40,  rotate: 'rotate(-105deg)', borderRadius: '50% 50% 70% 30% / 30% 70% 30% 70%' },
+  { top: '4%',  left: '38%', size: 13, duration: 3.5, delay: 250, rotate: 'rotate(150deg)',  borderRadius: '45% 55% 35% 65% / 65% 35% 65% 35%' },
+  { top: '70%', left: '48%', size: 14, duration: 3.3, delay: 220, rotate: 'rotate(-85deg)',  borderRadius: '70% 30% 50% 50% / 50% 50% 30% 70%' },
+  { top: '36%', left: '91%', size: 11, duration: 3.6, delay: 280, rotate: 'rotate(60deg)',   borderRadius: '35% 65% 40% 60% / 60% 40% 60% 40%' },
+  { top: '64%', left: '85%', size: 30, duration: 1.8, delay: 0,   rotate: 'rotate(-30deg)',  borderRadius: '48% 52% 68% 32% / 38% 62% 38% 62%' },
+];
+
 export const ContactSection: React.FC = () => {
   const { personal } = PORTFOLIO_DATA;
   const [copied, setCopied] = useState(false);
@@ -20,12 +35,6 @@ export const ContactSection: React.FC = () => {
   const [isStampFallen, setIsStampFallen] = useState(false);
   const [isSlamming, setIsSlamming] = useState(false);
 
-  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [hasMoved, setHasMoved] = useState(false);
-  const [isCanvasFading, setIsCanvasFading] = useState(false);
-  const startPosRef = React.useRef<{ x: number; y: number } | null>(null);
-  const fadeCanvasTimerRef = React.useRef<NodeJS.Timeout | null>(null);
   const autoRestoreTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -42,23 +51,12 @@ export const ContactSection: React.FC = () => {
 
   const triggerStampSlam = () => {
     if (autoRestoreTimerRef.current) clearTimeout(autoRestoreTimerRef.current);
-    if (fadeCanvasTimerRef.current) clearTimeout(fadeCanvasTimerRef.current);
-
-    // Clear drawn items from canvas immediately when stamp is applied
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-    setHasMoved(false);
-    setIsCanvasFading(false);
-
     setIsSlamming(true);
     setIsStampFallen(false);
     setIsFalling(false);
     setTimeout(() => {
       setIsSlamming(false);
-    }, 650);
+    }, 3500);
   };
 
   const scheduleAutoSlam = () => {
@@ -68,10 +66,10 @@ export const ContactSection: React.FC = () => {
     }, 5000);
   };
 
-  const handleStampClick = (e?: React.MouseEvent | React.TouchEvent) => {
-    if (e) {
-      e.stopPropagation();
-    }
+  const longPressTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const isTouchDeviceRef = React.useRef(false);
+
+  const triggerStampFall = () => {
     if (isFalling || isStampFallen || isSlamming) return;
     setIsFalling(true);
     setTimeout(() => {
@@ -81,127 +79,33 @@ export const ContactSection: React.FC = () => {
     }, 550);
   };
 
-  const handleRestoreStamp = () => {
-    triggerStampSlam();
-    setHasMoved(false);
-    setIsCanvasFading(false);
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
+  const handleDesktopClick = (e: React.MouseEvent) => {
+    if (isTouchDeviceRef.current) return;
+    e.stopPropagation();
+    triggerStampFall();
   };
 
-  const lastPosRef = React.useRef<{ x: number; y: number } | null>(null);
+  const handleTouchStart = () => {
+    isTouchDeviceRef.current = true;
+    if (isFalling || isStampFallen || isSlamming) return;
 
-  const startDrawing = (clientX: number, clientY: number) => {
-    if (!isStampFallen) return;
-
-    setIsDrawing(true);
-    setHasMoved(false);
-    setIsCanvasFading(false);
-    if (fadeCanvasTimerRef.current) clearTimeout(fadeCanvasTimerRef.current);
-
-    startPosRef.current = { x: clientX, y: clientY };
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-
-    lastPosRef.current = {
-      x: (clientX - rect.left) * scaleX,
-      y: (clientY - rect.top) * scaleY,
-    };
+    if (longPressTimerRef.current) clearTimeout(longPressTimerRef.current);
+    // Touch and hold threshold: 450ms long press required on mobile
+    longPressTimerRef.current = setTimeout(() => {
+      triggerStampFall();
+    }, 450);
   };
 
-  const draw = (clientX: number, clientY: number) => {
-    if (!isDrawing || !isStampFallen || !lastPosRef.current) return;
-
-    if (startPosRef.current) {
-      const dist = Math.hypot(clientX - startPosRef.current.x, clientY - startPosRef.current.y);
-      if (dist > 4) {
-        setHasMoved(true);
-      }
-    }
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-
-    const currentX = (clientX - rect.left) * scaleX;
-    const currentY = (clientY - rect.top) * scaleY;
-    const prevX = lastPosRef.current.x;
-    const prevY = lastPosRef.current.y;
-
-    // PASS 1: Subtle Wet Liquid Base Edge (No Glow)
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(prevX, prevY);
-    ctx.lineTo(currentX, currentY);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-    ctx.lineWidth = 5;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.stroke();
-    ctx.restore();
-
-    // PASS 2: Opaque Crisp Liquid White Ink Core (No Glow)
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(prevX, prevY);
-    ctx.lineTo(currentX, currentY);
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 3;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.stroke();
-    ctx.restore();
-
-    lastPosRef.current = { x: currentX, y: currentY };
-  };
-
-  const stopDrawing = () => {
-    if (!isDrawing) return;
-    setIsDrawing(false);
-
-    if (hasMoved) {
-      if (isStampFallen) {
-        scheduleAutoSlam();
-      }
-      // 2 seconds after drawing stops, fade out and clear canvas
-      if (fadeCanvasTimerRef.current) clearTimeout(fadeCanvasTimerRef.current);
-      fadeCanvasTimerRef.current = setTimeout(() => {
-        setIsCanvasFading(true);
-        setTimeout(() => {
-          const canvas = canvasRef.current;
-          if (canvas) {
-            const ctx = canvas.getContext('2d');
-            if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-          }
-          setIsCanvasFading(false);
-          setHasMoved(false);
-        }, 600);
-      }, 2000);
-    } else {
-      // Single tap without drag
-      if (isStampFallen) {
-        handleRestoreStamp();
-      } else {
-        handleStampClick();
-      }
+  const handleTouchEndOrMove = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
     }
   };
 
   return (
-    <section id="contact" style={{ padding: '5rem 0' }}>
+    <>
+      <section id="contact" style={{ padding: '5rem 0' }}>
       <div className="container">
         <div
           style={{
@@ -321,14 +225,19 @@ export const ContactSection: React.FC = () => {
               justifyContent: 'center',
             }}
           >
-            {/* Dramatic Wet Black Ink Splash with Glossy White Sheen */}
+            {/* Dramatic Wet Black Ink Splash with Glossy White Sheen & Dynamic Fluid Movement */}
             <svg
               viewBox="0 0 500 500"
+              className={isSlamming ? 'ink-splash-impact' : ''}
               style={{
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
-                transform: isStampHovered
+                transform: isSlamming
+                  ? 'translate(-50%, -50%) scale(1.05) rotate(-7deg)'
+                  : isStampFallen || isFalling
+                  ? 'translate(-50%, -50%) scale(0.72) rotate(-10deg)'
+                  : isStampHovered
                   ? 'translate(-50%, -50%) scale(1.15) rotate(-3deg)'
                   : 'translate(-50%, -50%) scale(1.05) rotate(-7deg)',
                 width: '100%',
@@ -338,7 +247,7 @@ export const ContactSection: React.FC = () => {
                 pointerEvents: 'none',
                 zIndex: 0,
                 filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.25))',
-                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                transition: isSlamming ? 'none' : 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
               }}
               aria-hidden="true"
             >
@@ -390,6 +299,16 @@ export const ContactSection: React.FC = () => {
                 <circle cx="310" cy="20" r="6" />
               </g>
 
+              {/* Dynamic Falling Liquid Ink Droplets when Stamp Slams */}
+              {isSlamming && (
+                <g fill="url(#wetBlackInk)">
+                  <circle cx="250" cy="465" r="9" className="ink-drip-falling" style={{ animationDelay: '0ms' }} />
+                  <circle cx="200" cy="450" r="6" className="ink-drip-falling" style={{ animationDelay: '60ms' }} />
+                  <circle cx="300" cy="455" r="7" className="ink-drip-falling" style={{ animationDelay: '120ms' }} />
+                  <circle cx="240" cy="480" r="5" className="ink-drip-falling" style={{ animationDelay: '180ms' }} />
+                </g>
+              )}
+
               {/* GLOSSY WHITE LIQUID HIGHLIGHTS / REFLECTIONS */}
               <g fill="none" stroke="url(#inkGlossGrad)" strokeLinecap="round">
                 {/* Curving wet highlights along top contour of splash */}
@@ -415,10 +334,13 @@ export const ContactSection: React.FC = () => {
               </g>
             </svg>
 
-            {/* Stamp Card (Tap to Tumble Down) */}
+            {/* Stamp Card (Touch & Hold on Mobile / Click on Desktop to Tumble) */}
             <div
-              onClick={!isStampFallen ? handleStampClick : undefined}
-              onTouchEnd={!isStampFallen ? handleStampClick : undefined}
+              onClick={!isStampFallen ? handleDesktopClick : undefined}
+              onTouchStart={!isStampFallen ? handleTouchStart : undefined}
+              onTouchEnd={handleTouchEndOrMove}
+              onTouchMove={handleTouchEndOrMove}
+              onTouchCancel={handleTouchEndOrMove}
               onMouseEnter={() => setIsStampHovered(true)}
               onMouseLeave={() => setIsStampHovered(false)}
               className={isFalling ? 'stamp-falling' : isSlamming ? 'stamp-slamming' : ''}
@@ -490,41 +412,32 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Universal Freehand Drawing Canvas Overlay (Spans entire stamp + ink splash backdrop) */}
-            <canvas
-              ref={canvasRef}
-              width={420}
-              height={420}
-              onMouseDown={(e) => startDrawing(e.clientX, e.clientY)}
-              onMouseMove={(e) => draw(e.clientX, e.clientY)}
-              onMouseUp={stopDrawing}
-              onMouseLeave={stopDrawing}
-              onTouchStart={(e) => {
-                if (e.touches[0]) startDrawing(e.touches[0].clientX, e.touches[0].clientY);
-              }}
-              onTouchMove={(e) => {
-                if (e.touches[0]) draw(e.touches[0].clientX, e.touches[0].clientY);
-              }}
-              onTouchEnd={stopDrawing}
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: '100%',
-                maxWidth: '420px',
-                height: '100%',
-                maxHeight: '420px',
-                zIndex: 10,
-                cursor: 'crosshair',
-                touchAction: 'none',
-                pointerEvents: isStampFallen ? 'auto' : 'none',
-                opacity: isCanvasFading ? 0 : 1,
-                transition: 'opacity 0.6s ease',
-              }}
-            />
           </div>
         </div>
       </div>
     </section>
+
+    {/* Screen Ink Splatter: Irregular Scattered Non-Circular Splash onto Screen -> Hold -> Drip to Bottom */}
+    {isSlamming && (
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 99999 }}>
+        {SCREEN_SPLASH_DROPS.map((drop, idx) => (
+          <div
+            key={idx}
+            className="screen-splash-drop"
+            style={{
+              top: drop.top,
+              left: drop.left,
+              width: `${drop.size}px`,
+              height: `${drop.size * 1.35}px`,
+              borderRadius: drop.borderRadius,
+              animationDuration: `${drop.duration}s`,
+              animationDelay: `${drop.delay}ms`,
+              '--burst-rotate': drop.rotate,
+            } as React.CSSProperties}
+          />
+        ))}
+      </div>
+    )}
+    </>
   );
 };
