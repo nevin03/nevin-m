@@ -148,3 +148,39 @@ body {
   background-color: var(--border-light);
   margin: 4rem 0;
 }
+
+/* Contact Section Mobile Reordering */
+.contact-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.contact-stamp-col {
+  order: 1;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.contact-text-col {
+  order: 2;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .contact-text-col {
+    order: 1;
+  }
+
+  .contact-stamp-col {
+    order: 2;
+  }
+}

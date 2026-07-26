@@ -46,17 +46,14 @@ export const ContactSection: React.FC = () => {
         </div>
 
         <div
+          className="contact-grid"
           style={{
             borderTop: '1px solid var(--border-light)',
             paddingTop: '3rem',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '4rem',
-            alignItems: 'center',
           }}
         >
           {/* Left Column: Contact Channels */}
-          <div>
+          <div className="contact-text-col">
             <h3 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.03em' }}>
               Get in Touch
             </h3>
@@ -142,7 +139,7 @@ export const ContactSection: React.FC = () => {
           </div>
 
           {/* Right Column: Postage Stamp Inked Portrait with Refined Contrast Hover */}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div className="contact-stamp-col">
             <div
               onMouseEnter={() => setIsStampHovered(true)}
               onMouseLeave={() => setIsStampHovered(false)}

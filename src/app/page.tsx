@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
-import { AboutExperience } from '@/components/AboutExperience';
+// import { AboutExperience } from '@/components/AboutExperience';
 import { ContactSection } from '@/components/ContactSection';
 import { Footer } from '@/components/Footer';
 import { TerminalView } from '@/components/TerminalView';
@@ -16,7 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'about', 'contact'];
+      const sections = ['hero', 'contact'];
       const scrollPosition = window.scrollY + 200;
 
       for (const section of sections) {
@@ -45,7 +45,7 @@ export default function Home() {
         isTerminalOpen={isTerminalOpen}
       />
       <Hero onOpenTerminal={() => setIsTerminalOpen(true)} />
-      <AboutExperience />
+      {/* <AboutExperience /> */}
       <ContactSection />
       <Footer />
       <TerminalView isOpen={isTerminalOpen} onClose={() => setIsTerminalOpen(false)} />
