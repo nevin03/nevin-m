@@ -68,7 +68,10 @@ export const ContactSection: React.FC = () => {
     }, 5000);
   };
 
-  const handleStampClick = () => {
+  const handleStampClick = (e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
     if (isFalling || isStampFallen || isSlamming) return;
     setIsFalling(true);
     setTimeout(() => {
@@ -413,77 +416,78 @@ export const ContactSection: React.FC = () => {
             </svg>
 
             {/* Stamp Card (Tap to Tumble Down) */}
-            {!isStampFallen && (
+            <div
+              onClick={!isStampFallen ? handleStampClick : undefined}
+              onTouchEnd={!isStampFallen ? handleStampClick : undefined}
+              onMouseEnter={() => setIsStampHovered(true)}
+              onMouseLeave={() => setIsStampHovered(false)}
+              className={isFalling ? 'stamp-falling' : isSlamming ? 'stamp-slamming' : ''}
+              style={{
+                position: 'relative',
+                zIndex: 1,
+                width: '100%',
+                maxWidth: '290px',
+                aspectRatio: '4 / 5',
+                padding: '12px',
+                background: 'var(--bg-primary)',
+                border: isStampHovered ? '2px solid var(--fg-primary)' : '2px dashed var(--fg-primary)',
+                boxShadow: isStampHovered ? '0 25px 50px rgba(0,0,0,0.2)' : '0 12px 30px rgba(0,0,0,0.1)',
+                transform: isStampHovered ? 'rotate(0deg) scale(1.04)' : 'rotate(-3deg)',
+                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                cursor: isStampFallen ? 'default' : 'pointer',
+                opacity: isStampFallen && !isSlamming ? 0 : 1,
+                pointerEvents: isStampFallen && !isSlamming ? 'none' : 'auto',
+                visibility: isStampFallen && !isSlamming ? 'hidden' : 'visible',
+              }}
+            >
+              {/* Inner Stamp Border */}
               <div
-                onClick={handleStampClick}
-                onTouchEnd={handleStampClick}
-                onMouseEnter={() => setIsStampHovered(true)}
-                onMouseLeave={() => setIsStampHovered(false)}
-                className={isFalling ? 'stamp-falling' : isSlamming ? 'stamp-slamming' : ''}
                 style={{
                   position: 'relative',
-                  zIndex: 1,
                   width: '100%',
-                  maxWidth: '290px',
-                  aspectRatio: '4 / 5',
-                  padding: '12px',
-                  background: 'var(--bg-primary)',
-                  border: isStampHovered ? '2px solid var(--fg-primary)' : '2px dashed var(--fg-primary)',
-                  boxShadow: isStampHovered ? '0 25px 50px rgba(0,0,0,0.2)' : '0 12px 30px rgba(0,0,0,0.1)',
-                  transform: isStampHovered ? 'rotate(0deg) scale(1.04)' : 'rotate(-3deg)',
-                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                  cursor: 'pointer',
+                  height: '100%',
+                  overflow: 'hidden',
+                  border: '1px solid var(--border-light)',
+                  background: '#ffffff',
                 }}
               >
-                {/* Inner Stamp Border */}
-                <div
+                <Image
+                  src="/portrait_v3.png"
+                  alt="Nevin M - Inked Postage Stamp"
+                  fill
+                  sizes="290px"
                   style={{
-                    position: 'relative',
-                    width: '100%',
-                    height: '100%',
-                    overflow: 'hidden',
-                    border: '1px solid var(--border-light)',
-                    background: '#ffffff',
-                  }}
-                >
-                  <Image
-                    src="/portrait_v3.png"
-                    alt="Nevin M - Inked Postage Stamp"
-                    fill
-                    sizes="290px"
-                    style={{
-                      objectFit: 'cover',
-                      filter: isStampHovered ? 'contrast(160%) brightness(98%)' : 'contrast(110%)',
-                      transition: 'all 0.3s ease',
-                    }}
-                    priority
-                  />
-                </div>
-
-                {/* Dynamic Quote Tag */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: '-14px',
-                    right: '-8px',
-                    background: 'var(--fg-primary)',
-                    color: 'var(--bg-primary)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    padding: '0.35rem 0.75rem',
-                    letterSpacing: '0.04em',
-                    border: '1px solid var(--bg-primary)',
-                    maxWidth: '240px',
-                    textAlign: 'right',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                    objectFit: 'cover',
+                    filter: isStampHovered ? 'contrast(160%) brightness(98%)' : 'contrast(110%)',
                     transition: 'all 0.3s ease',
                   }}
-                >
-                  &ldquo;{stampQuote}&rdquo;
-                </div>
+                  priority
+                />
               </div>
-            )}
+
+              {/* Dynamic Quote Tag */}
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '-14px',
+                  right: '-8px',
+                  background: 'var(--fg-primary)',
+                  color: 'var(--bg-primary)',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  padding: '0.35rem 0.75rem',
+                  letterSpacing: '0.04em',
+                  border: '1px solid var(--bg-primary)',
+                  maxWidth: '240px',
+                  textAlign: 'right',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                &ldquo;{stampQuote}&rdquo;
+              </div>
+            </div>
 
             {/* Universal Freehand Drawing Canvas Overlay (Spans entire stamp + ink splash backdrop) */}
             <canvas
