@@ -379,6 +379,22 @@ body {
   animation: splashWaitThenFall cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
+/* Disable Mobile Native Image Download/Save Callout Menu */
+.contact-stamp-col img,
+.contact-stamp-col {
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-user-drag: none !important;
+}
+
+/* Responsive Splatter Droplets: Fewer droplets on mobile viewports (<768px) */
+@media (max-width: 767px) {
+  .desktop-only-drop {
+    display: none !important;
+  }
+}
+
 /* Vanishing Ink Text Styling */
 .vanishing-ink-input {
   background: transparent;

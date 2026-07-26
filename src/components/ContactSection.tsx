@@ -12,18 +12,21 @@ const STAMP_QUOTES = [
 ];
 
 const SCREEN_SPLASH_DROPS = [
-  { top: '10%', left: '26%', size: 24, duration: 2.2, delay: 0,   rotate: 'rotate(25deg)',   borderRadius: '42% 58% 70% 30% / 45% 45% 55% 55%' },
-  { top: '6%',  left: '66%', size: 18, duration: 2.8, delay: 60,  rotate: 'rotate(-45deg)',  borderRadius: '60% 40% 30% 70% / 50% 30% 70% 50%' },
-  { top: '28%', left: '12%', size: 28, duration: 2.0, delay: 30,  rotate: 'rotate(80deg)',   borderRadius: '35% 65% 60% 40% / 40% 60% 40% 60%' },
-  { top: '18%', left: '84%', size: 20, duration: 2.6, delay: 100, rotate: 'rotate(-15deg)',  borderRadius: '55% 45% 75% 25% / 35% 65% 35% 65%' },
-  { top: '44%', left: '36%', size: 15, duration: 3.2, delay: 150, rotate: 'rotate(110deg)',  borderRadius: '40% 60% 50% 50% / 60% 40% 60% 40%' },
-  { top: '14%', left: '46%', size: 22, duration: 2.3, delay: 80,  rotate: 'rotate(-70deg)',  borderRadius: '65% 35% 45% 55% / 45% 55% 45% 55%' },
-  { top: '58%', left: '20%', size: 16, duration: 3.0, delay: 200, rotate: 'rotate(35deg)',   borderRadius: '30% 70% 65% 35% / 55% 35% 65% 45%' },
-  { top: '52%', left: '76%', size: 26, duration: 2.1, delay: 40,  rotate: 'rotate(-105deg)', borderRadius: '50% 50% 70% 30% / 30% 70% 30% 70%' },
-  { top: '4%',  left: '38%', size: 13, duration: 3.5, delay: 250, rotate: 'rotate(150deg)',  borderRadius: '45% 55% 35% 65% / 65% 35% 65% 35%' },
-  { top: '70%', left: '48%', size: 14, duration: 3.3, delay: 220, rotate: 'rotate(-85deg)',  borderRadius: '70% 30% 50% 50% / 50% 50% 30% 70%' },
-  { top: '36%', left: '91%', size: 11, duration: 3.6, delay: 280, rotate: 'rotate(60deg)',   borderRadius: '35% 65% 40% 60% / 60% 40% 60% 40%' },
-  { top: '64%', left: '85%', size: 30, duration: 1.8, delay: 0,   rotate: 'rotate(-30deg)',  borderRadius: '48% 52% 68% 32% / 38% 62% 38% 62%' },
+  // 5 Mobile & Desktop Drops (Visible on both mobile & desktop)
+  { top: '10%', left: '26%', size: 22, duration: 2.2, delay: 0,   rotate: 'rotate(25deg)',   borderRadius: '42% 58% 70% 30% / 45% 45% 55% 55%', isMobile: true },
+  { top: '28%', left: '12%', size: 24, duration: 2.0, delay: 30,  rotate: 'rotate(80deg)',   borderRadius: '35% 65% 60% 40% / 40% 60% 40% 60%', isMobile: true },
+  { top: '18%', left: '78%', size: 18, duration: 2.6, delay: 100, rotate: 'rotate(-15deg)',  borderRadius: '55% 45% 75% 25% / 35% 65% 35% 65%', isMobile: true },
+  { top: '58%', left: '20%', size: 16, duration: 3.0, delay: 200, rotate: 'rotate(35deg)',   borderRadius: '30% 70% 65% 35% / 55% 35% 65% 45%', isMobile: true },
+  { top: '52%', left: '74%', size: 24, duration: 2.1, delay: 40,  rotate: 'rotate(-105deg)', borderRadius: '50% 50% 70% 30% / 30% 70% 30% 70%', isMobile: true },
+
+  // Desktop Only Extra Drops (Hidden on mobile <768px to keep mobile clean)
+  { top: '6%',  left: '66%', size: 18, duration: 2.8, delay: 60,  rotate: 'rotate(-45deg)',  borderRadius: '60% 40% 30% 70% / 50% 30% 70% 50%', isMobile: false },
+  { top: '44%', left: '36%', size: 15, duration: 3.2, delay: 150, rotate: 'rotate(110deg)',  borderRadius: '40% 60% 50% 50% / 60% 40% 60% 40%', isMobile: false },
+  { top: '14%', left: '46%', size: 22, duration: 2.3, delay: 80,  rotate: 'rotate(-70deg)',  borderRadius: '65% 35% 45% 55% / 45% 55% 45% 55%', isMobile: false },
+  { top: '4%',  left: '38%', size: 13, duration: 3.5, delay: 250, rotate: 'rotate(150deg)',  borderRadius: '45% 55% 35% 65% / 65% 35% 65% 35%', isMobile: false },
+  { top: '70%', left: '48%', size: 14, duration: 3.3, delay: 220, rotate: 'rotate(-85deg)',  borderRadius: '70% 30% 50% 50% / 50% 50% 30% 70%', isMobile: false },
+  { top: '36%', left: '91%', size: 11, duration: 3.6, delay: 280, rotate: 'rotate(60deg)',   borderRadius: '35% 65% 40% 60% / 60% 40% 60% 40%', isMobile: false },
+  { top: '64%', left: '85%', size: 28, duration: 1.8, delay: 0,   rotate: 'rotate(-30deg)',  borderRadius: '48% 52% 68% 32% / 38% 62% 38% 62%', isMobile: false },
 ];
 
 export const ContactSection: React.FC = () => {
@@ -341,6 +344,7 @@ export const ContactSection: React.FC = () => {
               onTouchEnd={handleTouchEndOrMove}
               onTouchMove={handleTouchEndOrMove}
               onTouchCancel={handleTouchEndOrMove}
+              onContextMenu={(e) => e.preventDefault()}
               onMouseEnter={() => setIsStampHovered(true)}
               onMouseLeave={() => setIsStampHovered(false)}
               className={isFalling ? 'stamp-falling' : isSlamming ? 'stamp-slamming' : ''}
@@ -360,6 +364,9 @@ export const ContactSection: React.FC = () => {
                 opacity: isStampFallen && !isSlamming ? 0 : 1,
                 pointerEvents: isStampFallen && !isSlamming ? 'none' : 'auto',
                 visibility: isStampFallen && !isSlamming ? 'hidden' : 'visible',
+                userSelect: 'none',
+                WebkitUserSelect: 'none',
+                WebkitTouchCallout: 'none',
               }}
             >
               {/* Inner Stamp Border */}
@@ -378,10 +385,16 @@ export const ContactSection: React.FC = () => {
                   alt="Nevin M - Inked Postage Stamp"
                   fill
                   sizes="290px"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
                   style={{
                     objectFit: 'cover',
                     filter: isStampHovered ? 'contrast(160%) brightness(98%)' : 'contrast(110%)',
                     transition: 'all 0.3s ease',
+                    pointerEvents: 'none',
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none',
+                    WebkitTouchCallout: 'none',
                   }}
                   priority
                 />
@@ -423,7 +436,7 @@ export const ContactSection: React.FC = () => {
         {SCREEN_SPLASH_DROPS.map((drop, idx) => (
           <div
             key={idx}
-            className="screen-splash-drop"
+            className={`screen-splash-drop ${!drop.isMobile ? 'desktop-only-drop' : ''}`}
             style={{
               top: drop.top,
               left: drop.left,
