@@ -427,3 +427,139 @@ body {
   transform: translateY(0) scale(0.98);
 }
 
+/* Spider-Man Idle Web Swing Animation */
+@keyframes spideySwing {
+  0% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(-5deg);
+  }
+}
+
+.spidey-hover-shake:hover {
+  transform: scale(1.1) rotate(6deg);
+}
+
+/* Batman Idle Hover & Cape Animation */
+.batman-hover-rise:hover {
+  transform: translateY(-4px) scale(1.08);
+}
+
+@keyframes batCapeFlutter {
+  0%, 100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(1.04) skewX(2deg);
+  }
+}
+
+.bat-cape {
+  transform-origin: top center;
+  animation: batCapeFlutter 3s ease-in-out infinite alternate;
+}
+
+/* Flying Bats Flanking Batman Animations */
+@keyframes batHoverLeft {
+  0%, 100% {
+    transform: translateY(0px) rotate(-6deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-2deg);
+  }
+}
+
+@keyframes batHoverRight {
+  0%, 100% {
+    transform: translateY(-4px) rotate(6deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+@keyframes batWingFlapLeft {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(-0.7) translateY(4px);
+  }
+}
+
+@keyframes batWingFlapRight {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(-0.7) translateY(4px);
+  }
+}
+
+.bat-flying-left {
+  animation: batHoverLeft 2.4s ease-in-out infinite alternate;
+}
+
+.bat-flying-right {
+  animation: batHoverRight 2.8s ease-in-out infinite alternate 0.3s;
+}
+
+.bat-wing-anim-left {
+  transform-origin: 12px 10px;
+  animation: batWingFlapLeft 0.35s ease-in-out infinite alternate;
+}
+
+.bat-wing-anim-right {
+  transform-origin: 18px 10px;
+  animation: batWingFlapRight 0.35s ease-in-out infinite alternate;
+}
+
+/* Flanking Spiders Animations for Spider-Man */
+@keyframes spiderBounceLeft {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+@keyframes spiderBounceRight {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+@keyframes spiderLegsTwitch {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06) rotate(2deg);
+  }
+}
+
+.spider-left-bounce {
+  animation: spiderBounceLeft 2.6s ease-in-out infinite alternate;
+}
+
+.spider-right-bounce {
+  animation: spiderBounceRight 3.1s ease-in-out infinite alternate 0.4s;
+}
+
+.spider-legs-anim {
+  transform-origin: center;
+  animation: spiderLegsTwitch 0.4s ease-in-out infinite alternate;
+}
+
+
+
+
+

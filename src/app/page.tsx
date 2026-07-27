@@ -8,6 +8,8 @@ import { ContactSection } from '@/components/ContactSection';
 import { Footer } from '@/components/Footer';
 import { TerminalView } from '@/components/TerminalView';
 import { QuoteModal } from '@/components/QuoteModal';
+import { IdleSpiderman } from '@/components/IdleSpiderman';
+import { IdleBatman } from '@/components/IdleBatman';
 // import { FloatingMessageChat } from '@/components/FloatingMessageChat';
 
 export default function Home() {
@@ -59,6 +61,8 @@ export default function Home() {
 
   return (
     <main style={{ minHeight: '100vh', position: 'relative' }}>
+      <IdleSpiderman />
+      <IdleBatman />
       <QuoteModal />
       <Header
         activeSection={activeSection}
