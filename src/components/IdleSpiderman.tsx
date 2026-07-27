@@ -2,49 +2,23 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 
-export const IdleSpiderman: React.FC = () => {
-  const [isIdle, setIsIdle] = useState(false);
-  const [showWeb, setShowWeb] = useState(false);
-  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
+interface IdleSpidermanProps {
+  isActive: boolean;
+}
 
-  const IDLE_DELAY = 5500; // 5.5 seconds idle threshold
+export const IdleSpiderman: React.FC<IdleSpidermanProps> = ({ isActive }) => {
+  const [showWeb, setShowWeb] = useState(false);
 
   useEffect(() => {
-    const handleActivity = () => {
-      // Hide spiderman when active
-      setIsIdle(false);
+    if (isActive) {
+      const timer = setTimeout(() => setShowWeb(true), 50);
+      return () => clearTimeout(timer);
+    } else {
       setShowWeb(false);
+    }
+  }, [isActive]);
 
-      if (idleTimerRef.current) {
-        clearTimeout(idleTimerRef.current);
-      }
-
-      // Set new idle timer
-      idleTimerRef.current = setTimeout(() => {
-        setIsIdle(true);
-        // Small delay for web drop animation
-        setTimeout(() => setShowWeb(true), 100);
-      }, IDLE_DELAY);
-    };
-
-    // Events to monitor for activity
-    const events = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'];
-
-    events.forEach((evt) => window.addEventListener(evt, handleActivity));
-
-    // Start initial timer
-    idleTimerRef.current = setTimeout(() => {
-      setIsIdle(true);
-      setTimeout(() => setShowWeb(true), 100);
-    }, IDLE_DELAY);
-
-    return () => {
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-      events.forEach((evt) => window.removeEventListener(evt, handleActivity));
-    };
-  }, []);
-
-  if (!isIdle) return null;
+  if (!isActive && !showWeb) return null;
 
   return (
     <div

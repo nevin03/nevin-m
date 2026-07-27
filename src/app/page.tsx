@@ -16,6 +16,7 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState('hero');
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [initialCmd, setInitialCmd] = useState<string | undefined>(undefined);
+  const [isChildMode, setIsChildMode] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,13 +62,15 @@ export default function Home() {
 
   return (
     <main style={{ minHeight: '100vh', position: 'relative' }}>
-      <IdleSpiderman />
-      <IdleBatman />
+      <IdleSpiderman isActive={isChildMode} />
+      <IdleBatman isActive={isChildMode} />
       <QuoteModal />
       <Header
         activeSection={activeSection}
         onToggleTerminal={handleToggleTerminal}
         isTerminalOpen={isTerminalOpen}
+        isChildMode={isChildMode}
+        onToggleChildMode={() => setIsChildMode(!isChildMode)}
       />
       <Hero onOpenTerminal={() => { setInitialCmd(undefined); setIsTerminalOpen(true); }} />
       {/* <AboutExperience /> */}

@@ -2,44 +2,23 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 
-export const IdleBatman: React.FC = () => {
-  const [isIdle, setIsIdle] = useState(false);
-  const [showBatman, setShowBatman] = useState(false);
-  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
+interface IdleBatmanProps {
+  isActive: boolean;
+}
 
-  const IDLE_DELAY = 5500; // 5.5 seconds idle threshold
+export const IdleBatman: React.FC<IdleBatmanProps> = ({ isActive }) => {
+  const [showBatman, setShowBatman] = useState(false);
 
   useEffect(() => {
-    const handleActivity = () => {
-      setIsIdle(false);
+    if (isActive) {
+      const timer = setTimeout(() => setShowBatman(true), 50);
+      return () => clearTimeout(timer);
+    } else {
       setShowBatman(false);
+    }
+  }, [isActive]);
 
-      if (idleTimerRef.current) {
-        clearTimeout(idleTimerRef.current);
-      }
-
-      idleTimerRef.current = setTimeout(() => {
-        setIsIdle(true);
-        setTimeout(() => setShowBatman(true), 100);
-      }, IDLE_DELAY);
-    };
-
-    const events = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'];
-
-    events.forEach((evt) => window.addEventListener(evt, handleActivity));
-
-    idleTimerRef.current = setTimeout(() => {
-      setIsIdle(true);
-      setTimeout(() => setShowBatman(true), 100);
-    }, IDLE_DELAY);
-
-    return () => {
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-      events.forEach((evt) => window.removeEventListener(evt, handleActivity));
-    };
-  }, []);
-
-  if (!isIdle) return null;
+  if (!isActive && !showBatman) return null;
 
   return (
     <div

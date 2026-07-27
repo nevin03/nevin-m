@@ -1,15 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Terminal as TerminalIcon, Sun, Moon } from 'lucide-react';
+import { Terminal as TerminalIcon, Sun, Moon, Baby } from 'lucide-react';
 
 interface HeaderProps {
   activeSection: string;
   onToggleTerminal: () => void;
   isTerminalOpen: boolean;
+  isChildMode: boolean;
+  onToggleChildMode: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onToggleTerminal, isTerminalOpen }) => {
+export const Header: React.FC<HeaderProps> = ({ onToggleTerminal, isChildMode, onToggleChildMode }) => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   const toggleTheme = () => {
@@ -84,6 +86,25 @@ export const Header: React.FC<HeaderProps> = ({ onToggleTerminal, isTerminalOpen
             }}
           >
             {theme === 'light' ? <Moon size={15} /> : <Sun size={15} />}
+          </button>
+
+          {/* Baby Icon Toggle Button */}
+          <button
+            onClick={onToggleChildMode}
+            aria-label="Toggle Superhero Mode"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: isChildMode ? 'var(--fg-primary)' : 'var(--fg-muted)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              transition: 'all 0.2s ease',
+              transform: isChildMode ? 'scale(1.15)' : 'scale(1)',
+            }}
+            title="100% kids friendly"
+          >
+            <Baby size={17} />
           </button>
         </nav>
       </div>
