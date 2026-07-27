@@ -13,6 +13,7 @@ import { QuoteModal } from '@/components/QuoteModal';
 export default function Home() {
   const [activeSection, setActiveSection] = useState('hero');
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [initialCmd, setInitialCmd] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,19 +37,43 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleOpenDinoGame = () => {
+    setInitialCmd('dino');
+    setIsTerminalOpen(true);
+  };
+
+  const handleToggleTerminal = () => {
+    if (isTerminalOpen) {
+      setIsTerminalOpen(false);
+      setInitialCmd(undefined);
+    } else {
+      setInitialCmd(undefined);
+      setIsTerminalOpen(true);
+    }
+  };
+
+  const handleCloseTerminal = () => {
+    setIsTerminalOpen(false);
+    setInitialCmd(undefined);
+  };
+
   return (
     <main style={{ minHeight: '100vh', position: 'relative' }}>
       <QuoteModal />
       <Header
         activeSection={activeSection}
-        onToggleTerminal={() => setIsTerminalOpen(!isTerminalOpen)}
+        onToggleTerminal={handleToggleTerminal}
         isTerminalOpen={isTerminalOpen}
       />
-      <Hero onOpenTerminal={() => setIsTerminalOpen(true)} />
+      <Hero onOpenTerminal={() => { setInitialCmd(undefined); setIsTerminalOpen(true); }} />
       {/* <AboutExperience /> */}
       <ContactSection />
-      <Footer />
-      <TerminalView isOpen={isTerminalOpen} onClose={() => setIsTerminalOpen(false)} />
+      <Footer onOpenDinoGame={handleOpenDinoGame} />
+      <TerminalView
+        isOpen={isTerminalOpen}
+        onClose={handleCloseTerminal}
+        initialCommand={initialCmd}
+      />
       {/* <FloatingMessageChat /> */}
     </main>
   );

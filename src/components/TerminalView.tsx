@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Terminal as TerminalIcon, X, Maximize2, Minimize2, CornerDownLeft, Copy, Check } from 'lucide-react';
 import { PORTFOLIO_DATA } from '@/data/portfolio';
+import { DinoGame } from './DinoGame';
 
 interface TerminalViewProps {
   isOpen: boolean;
   onClose: () => void;
+  initialCommand?: string;
 }
 
 interface CommandHistory {
@@ -14,7 +16,16 @@ interface CommandHistory {
   output: React.ReactNode;
 }
 
-export const TerminalView: React.FC<TerminalViewProps> = ({ isOpen, onClose }) => {
+const COMMANDS = [
+  { cmd: 'help', desc: 'List all available terminal commands' },
+  { cmd: 'dino', desc: 'Launch the interactive Chrome Dino runner game' },
+  { cmd: 'whoami', desc: 'Display Nevin M core summary' },
+  { cmd: 'about', desc: 'Overview of Frontend Engineering, Product Strategy & Backend Development' },
+  { cmd: 'contact', desc: 'Get direct Gmail & LinkedIn info' },
+  { cmd: 'clear', desc: 'Clear the terminal output' },
+];
+
+export const TerminalView: React.FC<TerminalViewProps> = ({ isOpen, onClose, initialCommand }) => {
   const [inputVal, setInputVal] = useState('');
   const [history, setHistory] = useState<CommandHistory[]>([
     {
@@ -25,7 +36,7 @@ export const TerminalView: React.FC<TerminalViewProps> = ({ isOpen, onClose }) =
             NEVIN M // INTERACTIVE TERMINAL CLI v1.0.4
           </div>
           <div style={{ color: 'var(--fg-muted)', marginTop: '0.2rem' }}>
-            Type <span style={{ color: 'var(--fg-primary)', fontWeight: 600 }}>&apos;help&apos;</span> to see available developer commands.
+            Type <span style={{ color: 'var(--fg-primary)', fontWeight: 600 }}>&apos;help&apos;</span> or <span style={{ color: 'var(--fg-primary)', fontWeight: 600 }}>&apos;dino&apos;</span> to play the arcade game.
           </div>
         </div>
       ),
@@ -36,32 +47,17 @@ export const TerminalView: React.FC<TerminalViewProps> = ({ isOpen, onClose }) =
 
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalEndRef = useRef<HTMLDivElement>(null);
+  const executedCmdRef = useRef<string | null>(null);
 
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [history]);
-
-  if (!isOpen) return null;
-
-  const commands = [
-    { cmd: 'help', desc: 'List all available terminal commands' },
-    { cmd: 'whoami', desc: 'Display Nevin M core summary' },
-    { cmd: 'about', desc: 'Overview of Frontend Engineering, Product Strategy & Backend Development' },
-    { cmd: 'contact', desc: 'Get direct Gmail & LinkedIn info' },
-    { cmd: 'clear', desc: 'Clear the terminal output' },
-  ];
-
-  const handleCommand = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = inputVal.trim().toLowerCase();
-
+  const executeCommand = useCallback((cmdString: string) => {
+    const trimmed = cmdString.trim().toLowerCase();
     if (!trimmed) return;
+
+    if (trimmed === 'clear') {
+      setHistory([]);
+      setInputVal('');
+      return;
+    }
 
     let outputNode: React.ReactNode = null;
 
@@ -70,7 +66,7 @@ export const TerminalView: React.FC<TerminalViewProps> = ({ isOpen, onClose }) =
         outputNode = (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', margin: '0.5rem 0' }}>
             <div style={{ color: 'var(--fg-muted)', marginBottom: '0.25rem' }}>AVAILABLE COMMANDS:</div>
-            {commands.map((cmd) => (
+            {COMMANDS.map((cmd) => (
               <div key={cmd.cmd} style={{ display: 'grid', gridTemplateColumns: '130px 1fr', fontSize: '0.8rem' }}>
                 <span style={{ color: 'var(--fg-primary)', fontWeight: 700 }}>{cmd.cmd}</span>
                 <span style={{ color: 'var(--fg-muted)' }}>{cmd.desc}</span>
@@ -78,6 +74,12 @@ export const TerminalView: React.FC<TerminalViewProps> = ({ isOpen, onClose }) =
             ))}
           </div>
         );
+        break;
+
+      case 'dino':
+      case 'game':
+      case 'play':
+        outputNode = <DinoGame />;
         break;
 
       case 'whoami':
@@ -100,11 +102,6 @@ export const TerminalView: React.FC<TerminalViewProps> = ({ isOpen, onClose }) =
         );
         break;
 
-      case 'clear':
-        setHistory([]);
-        setInputVal('');
-        return;
-
       default:
         outputNode = (
           <div style={{ color: 'var(--fg-muted)', margin: '0.25rem 0' }}>
@@ -113,8 +110,54 @@ export const TerminalView: React.FC<TerminalViewProps> = ({ isOpen, onClose }) =
         );
     }
 
-    setHistory((prev) => [...prev, { command: trimmed, output: outputNode }]);
+    setHistory((prev) => {
+      if (prev.length > 0 && prev[prev.length - 1].command === trimmed) {
+        return prev;
+      }
+      return [...prev, { command: trimmed, output: outputNode }];
+    });
     setInputVal('');
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => inputRef.current?.focus(), 100);
+      if (initialCommand && executedCmdRef.current !== initialCommand) {
+        executedCmdRef.current = initialCommand;
+        setTimeout(() => executeCommand(initialCommand), 10);
+      }
+    } else {
+      executedCmdRef.current = null;
+      // Reset history to standard welcome screen on close
+      setHistory([
+        {
+          command: 'welcome',
+          output: (
+            <div>
+              <div style={{ color: 'var(--fg-primary)', fontWeight: 700 }}>
+                NEVIN M // INTERACTIVE TERMINAL CLI v1.0.4
+              </div>
+              <div style={{ color: 'var(--fg-muted)', marginTop: '0.2rem' }}>
+                Type <span style={{ color: 'var(--fg-primary)', fontWeight: 600 }}>&apos;help&apos;</span> to see available developer commands.
+              </div>
+            </div>
+          ),
+        },
+      ]);
+    }
+  }, [isOpen, initialCommand, executeCommand]);
+
+  useEffect(() => {
+    if (history.length > 0) {
+      terminalEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [history.length]);
+
+  if (!isOpen) return null;
+
+  const handleCommand = (e: React.FormEvent) => {
+    e.preventDefault();
+    executeCommand(inputVal);
   };
 
   const copyCLIOutput = () => {
