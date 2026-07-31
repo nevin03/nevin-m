@@ -91,19 +91,11 @@ export const ContactSection: React.FC = () => {
   const handleTouchStart = () => {
     isTouchDeviceRef.current = true;
     if (isFalling || isStampFallen || isSlamming) return;
-
-    if (longPressTimerRef.current) clearTimeout(longPressTimerRef.current);
-    // Touch and hold threshold: 450ms long press required on mobile
-    longPressTimerRef.current = setTimeout(() => {
-      triggerStampFall();
-    }, 450);
+    triggerStampFall();
   };
 
   const handleTouchEndOrMove = () => {
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-      longPressTimerRef.current = null;
-    }
+    // No-op now since touch triggers instantly
   };
 
   return (
@@ -230,6 +222,11 @@ export const ContactSection: React.FC = () => {
           >
             {/* Dramatic Wet Black Ink Splash with Glossy White Sheen & Dynamic Fluid Movement */}
             <svg
+              onClick={() => {
+                if (isStampFallen && !isSlamming) {
+                  triggerStampSlam();
+                }
+              }}
               viewBox="0 0 500 500"
               className={isSlamming ? 'ink-splash-impact' : ''}
               style={{
@@ -247,7 +244,8 @@ export const ContactSection: React.FC = () => {
                 maxWidth: '380px',
                 height: 'auto',
                 aspectRatio: '1',
-                pointerEvents: 'none',
+                pointerEvents: isStampFallen && !isSlamming ? 'auto' : 'none',
+                cursor: isStampFallen && !isSlamming ? 'pointer' : 'default',
                 zIndex: 0,
                 filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.25))',
                 transition: isSlamming ? 'none' : 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',

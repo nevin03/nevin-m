@@ -31,7 +31,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
             marginBottom: '1rem',
           }}
         >
-          // FULL STACK DEVELOPER & PRODUCT ENGINEER
+          // VISION → CONCEPT → GRIND → LAUNCH
         </div>
 
         {/* Signature Name Headline */}
@@ -46,7 +46,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
           {personal.name}
         </h1>
 
-        {/* Key Stats inline summary */}
         <div
           style={{
             fontFamily: 'var(--font-mono)',
@@ -58,11 +57,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
             flexWrap: 'wrap',
           }}
         >
-          <span>
-            <strong>1.6+ Years</strong> Industrial Exp
-          </span>
-          <span>•</span>
-          <span>Frontend Engineering, Product Strategy & Backend Development</span>
+          <span>Product Developer | Frontend Engineer</span>
         </div>
 
         {/* Concise Description */}
@@ -73,6 +68,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
             maxWidth: '680px',
             lineHeight: 1.6,
             marginBottom: '3rem',
+            whiteSpace: 'pre-line',
           }}
         >
           {personal.bio}

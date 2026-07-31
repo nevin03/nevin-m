@@ -375,7 +375,13 @@ export const DinoGame: React.FC<DinoGameProps> = () => {
         position: 'relative',
         userSelect: 'none',
       }}
-      onClick={jump}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
+        jump();
+      }}
     >
       {/* Top HUD: Score & High Score */}
       <div

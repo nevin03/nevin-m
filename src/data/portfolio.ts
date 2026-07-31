@@ -6,7 +6,7 @@ export const PORTFOLIO_DATA = {
     location: 'India / Remote',
     email: 'nevinm2021@gmail.com',
     linkedin: 'https://in.linkedin.com/in/nevin-m-5a4952217',
-    bio: 'Full stack developer and product engineer with 1.6+ years of industrial experience. Specialized in frontend engineering, product strategy, backend development, and scaling high-performance web products.',
+    bio: 'Vision → Concept → Grind → Launch;\nFrontend-focused Full Stack Engineer with a passion for building digital products. I enjoy transforming ideas into polished, production-ready experiences through thoughtful design, clean code, and continuous iteration.',
     stats: [
       { label: 'Industrial Experience', value: '1.6+ Years' },
       { label: 'Core Expertise', value: 'Frontend & Product Engineering' }
@@ -19,7 +19,7 @@ export const PORTFOLIO_DATA = {
     subtitle: 'Full Stack Developer & Product Engineer with 1.6+ years of industrial experience.',
     pillars: [
       {
-        title: 'Frontend Engineering',
+        title: 'Frontend Engineer',
         description: 'Building fast, responsive, and ultra-clean web user interfaces focused on web performance, accessibility, and seamless user experience.'
       },
       {

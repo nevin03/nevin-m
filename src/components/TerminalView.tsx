@@ -20,7 +20,7 @@ const COMMANDS = [
   { cmd: 'help', desc: 'List all available terminal commands' },
   { cmd: 'dino', desc: 'Launch the interactive Chrome Dino runner game' },
   { cmd: 'whoami', desc: 'Display Nevin M core summary' },
-  { cmd: 'about', desc: 'Overview of Frontend Engineering, Product Strategy & Backend Development' },
+  { cmd: 'about', desc: 'Overview of Product Developer' },
   { cmd: 'contact', desc: 'Get direct Gmail & LinkedIn info' },
   { cmd: 'clear', desc: 'Clear the terminal output' },
 ];
@@ -87,8 +87,7 @@ export const TerminalView: React.FC<TerminalViewProps> = ({ isOpen, onClose, ini
         outputNode = (
           <div style={{ margin: '0.5rem 0', color: 'var(--fg-secondary)', lineHeight: 1.6 }}>
             <div style={{ fontWeight: 700, color: 'var(--fg-primary)' }}>Nevin M — Human - live and let live,love regardlessly</div>
-            <div>Industrial Experience: <span style={{ color: 'var(--fg-primary)', fontWeight: 600 }}>1.6+ Years</span></div>
-            <div style={{ marginTop: '0.5rem', color: 'var(--fg-muted)' }}>{PORTFOLIO_DATA.personal.bio}</div>
+            <div style={{ marginTop: '0.5rem', color: 'var(--fg-muted)', whiteSpace: 'pre-line' }}>{PORTFOLIO_DATA.personal.bio}</div>
           </div>
         );
         break;
