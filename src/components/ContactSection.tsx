@@ -222,7 +222,9 @@ export const ContactSection: React.FC = () => {
           >
             {/* Dramatic Wet Black Ink Splash with Glossy White Sheen & Dynamic Fluid Movement */}
             <svg
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 if (isStampFallen && !isSlamming) {
                   triggerStampSlam();
                 }
@@ -361,7 +363,6 @@ export const ContactSection: React.FC = () => {
                 cursor: isStampFallen ? 'default' : 'pointer',
                 opacity: isStampFallen && !isSlamming ? 0 : 1,
                 pointerEvents: isStampFallen && !isSlamming ? 'none' : 'auto',
-                visibility: isStampFallen && !isSlamming ? 'hidden' : 'visible',
                 userSelect: 'none',
                 WebkitUserSelect: 'none',
                 WebkitTouchCallout: 'none',
