@@ -95,21 +95,15 @@ export const ContactSection: React.FC = () => {
   };
 
   const handleDesktopClick = (e: React.MouseEvent) => {
+    // Disable interaction completely on all touch devices (phones, tablets, iPads)
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
+      if (window.innerWidth < 1024) return;
+    }
     if (isTouchDeviceRef.current) return;
     e.preventDefault();
     e.stopPropagation();
     triggerStampFall();
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (e.cancelable) e.preventDefault();
-    isTouchDeviceRef.current = true;
-    if (isFalling || isStampFallen || isSlamming) return;
-    triggerStampFall();
-  };
-
-  const handleTouchEndOrMove = () => {
-    // No-op now since touch triggers instantly
   };
 
   return (
@@ -142,9 +136,9 @@ export const ContactSection: React.FC = () => {
               Get in Touch
             </h3>
 
-            <p style={{ color: 'var(--fg-muted)', fontSize: '1rem', lineHeight: 1.6, marginBottom: '2.5rem' }}>
+            {/* <p style={{ color: 'var(--fg-muted)', fontSize: '1rem', lineHeight: 1.6, marginBottom: '2.5rem' }}>
               Available for executive leadership, product advisory, and frontend engineering roles.
-            </p>
+            </p> */}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               {/* Gmail Box */}
@@ -351,13 +345,9 @@ export const ContactSection: React.FC = () => {
               </g>
             </svg>
 
-            {/* Stamp Card (Touch & Hold on Mobile / Click on Desktop to Tumble) */}
+            {/* Stamp Card (Click on Desktop to Tumble - Disabled on Mobile) */}
             <div
               onClick={!isStampFallen ? handleDesktopClick : undefined}
-              onTouchStart={!isStampFallen ? handleTouchStart : undefined}
-              onTouchEnd={handleTouchEndOrMove}
-              onTouchMove={handleTouchEndOrMove}
-              onTouchCancel={handleTouchEndOrMove}
               onContextMenu={(e) => e.preventDefault()}
               onMouseEnter={() => setIsStampHovered(true)}
               onMouseLeave={() => setIsStampHovered(false)}
