@@ -57,8 +57,20 @@ export const ContactSection: React.FC = () => {
     setIsSlamming(true);
     setIsStampFallen(false);
     setIsFalling(false);
+    
+    // Capture scroll position before timeout finishes to prevent iOS jump
+    const currentScroll = window.scrollY;
+    
     setTimeout(() => {
+      const scrollBeforeUpdate = window.scrollY;
       setIsSlamming(false);
+      
+      // Fix for iOS Safari auto-scrolling to top when fixed/animated elements change
+      requestAnimationFrame(() => {
+        if (window.scrollY === 0 && scrollBeforeUpdate > 10) {
+          window.scrollTo({ top: scrollBeforeUpdate, behavior: 'instant' });
+        }
+      });
     }, 3500);
   };
 
