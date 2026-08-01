@@ -224,6 +224,12 @@ body {
   animation: spinSlow 30s linear infinite;
 }
 
+@media (max-width: 767px) {
+  .hero-visual-right {
+    display: none !important;
+  }
+}
+
 /* Stamp Falling Animation */
 @keyframes stampFall {
   0% {
