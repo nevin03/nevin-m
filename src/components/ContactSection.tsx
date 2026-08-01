@@ -84,11 +84,13 @@ export const ContactSection: React.FC = () => {
 
   const handleDesktopClick = (e: React.MouseEvent) => {
     if (isTouchDeviceRef.current) return;
+    e.preventDefault();
     e.stopPropagation();
     triggerStampFall();
   };
 
-  const handleTouchStart = () => {
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.cancelable) e.preventDefault();
     isTouchDeviceRef.current = true;
     if (isFalling || isStampFallen || isSlamming) return;
     triggerStampFall();
@@ -112,7 +114,7 @@ export const ContactSection: React.FC = () => {
             marginBottom: '2rem',
           }}
         >
-          02 // CONTACT & TRANSMISSION
+          // CONTACT
         </div>
 
         <div

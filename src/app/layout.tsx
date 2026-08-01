@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Nevin M — Full Stack Developer & Product Engineer',
+  title: 'Nevin M',
   description:
-    'Minimalist portfolio of Nevin M. Full Stack Developer & Product Engineer with 1.6+ years industrial experience in frontend engineering, product strategy, and backend development.',
+    'Product Developer and Frontend Engineer with experience in building scalable and efficient web applications.',
   keywords: [
     'Nevin M',
     'Full Stack Developer',
@@ -15,9 +15,9 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Nevin M' }],
   openGraph: {
-    title: 'Nevin M — Full Stack Developer & Product Engineer',
-    description:
-      'Minimalist portfolio of Nevin M, Full Stack Developer & Product Engineer with 1.6+ years industrial experience.',
+  title: 'Nevin M',
+  description:
+    'Product Developer and Frontend Engineer with experience in building scalable and efficient web applications.',
     type: 'website',
   },
 };
